@@ -1,0 +1,27 @@
+<html>
+	<head>
+		{% load googlecharts %}
+	</head>
+	<body>
+		{# container #}
+		<div id="out"></div>
+		{% googlecharts %}
+			{# named data and options can be reused #}
+			{% data values "out_data" %}
+				{% col "string" "Name" %}"{{ val }}"{% endcol %}
+				{% col "number" "Value" %}{{ val }}{% endcol %}
+			{% enddata %}
+			{# you can also use global javascript variables here, #}
+			{# and call functions #}
+			{% options "out_options" %}
+				kind: "PieChart",
+				options: {
+					width: 1000,
+					height: 600
+				}
+			{% endoptions %}
+			{# chart is assembled from container, data and options #}
+			{% graph "out" "out_data" "out_options" %}
+		{% endgooglecharts %}
+	</body>
+</html>
