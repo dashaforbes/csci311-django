@@ -8,7 +8,7 @@ class Issues(models.Model):
     title = models.CharField(max_length=250)
     type = models.CharField(max_length=25)
     stage = models.CharField(max_length=25)
-    status = models.CharField(max_length=10)
+    status = models.CharField(max_length=15)
     assigned_to = models.CharField(max_length=100)
     priority = models.CharField(max_length=25)
     message_count = models.IntegerField(default=0)

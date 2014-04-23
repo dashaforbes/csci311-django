@@ -3,6 +3,7 @@ CSCI311 Project
 
 ###Dependencies
 ```
+django==1.6.2
 django-google-charts
 ```
 
