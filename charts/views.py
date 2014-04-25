@@ -1,26 +1,26 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from charts.models import Issues
+from charts.models import Issue
 from django.db.models import Count
 from django import forms
 
 # Create your views here.
 def index(request):
-    top_assigned = Issues.objects.values_list('assigned_to').annotate(assigned_count=Count('assigned_to')).order_by('-assigned_count')[:10]
+    top_assigned = Issue.objects.values_list('assigned_to').annotate(assigned_count=Count('assigned_to')).order_by('-assigned_count')[:10]
     print str(top_assigned)
     context = {
         'values': [
-            ['behaviour',Issues.objects.filter(type='behavior').count()],
-            ['resource',Issues.objects.filter(type='resource usage').count()],
-            ['crash',Issues.objects.filter(type='crash').count()],
-            ['enhancement',Issues.objects.filter(type='enhancement').count()],
-            ['security',Issues.objects.filter(type='security').count()]
+            ['behaviour',Issue.objects.filter(type='behavior').count()],
+            ['resource',Issue.objects.filter(type='resource usage').count()],
+            ['crash',Issue.objects.filter(type='crash').count()],
+            ['enhancement',Issue.objects.filter(type='enhancement').count()],
+            ['security',Issue.objects.filter(type='security').count()]
         ],
         'values_2': [
-            ['open',Issues.objects.filter(status='open').count()],
-            ['closed',Issues.objects.filter(status='closed').count()],
-            ['pending',Issues.objects.filter(status='pending').count()],
-            ['languishing',Issues.objects.filter(status='languishing').count()]
+            ['open',Issue.objects.filter(status='open').count()],
+            ['closed',Issue.objects.filter(status='closed').count()],
+            ['pending',Issue.objects.filter(status='pending').count()],
+            ['languishing',Issue.objects.filter(status='languishing').count()]
         ],
         'values_3': [
             [top_assigned[0][0],top_assigned[0][1]],
