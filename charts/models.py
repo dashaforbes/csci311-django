@@ -3,7 +3,7 @@ from django.forms import ModelForm
 
 # Create your models here.
 class Issue(models.Model):
-    id = models.CharField(max_length=10,primary_key=True)
+    id = models.AutoField(primary_key=True)
     activity = models.DateTimeField(auto_now=True)
     creator = models.CharField(max_length=100)
     title = models.CharField(max_length=250)
@@ -76,7 +76,7 @@ class Issue(models.Model):
     message_count = models.IntegerField(default=0)
 
     def __unicode__(self):
-        return self.id
+        return unicode(self.title)
 
 class Component(models.Model):
     issue = models.ForeignKey(Issue)

@@ -10,17 +10,17 @@ def index(request):
     print str(top_assigned)
     context = {
         'values': [
-            ['behaviour',Issue.objects.filter(type='behavior').count()],
-            ['resource',Issue.objects.filter(type='resource usage').count()],
-            ['crash',Issue.objects.filter(type='crash').count()],
-            ['enhancement',Issue.objects.filter(type='enhancement').count()],
-            ['security',Issue.objects.filter(type='security').count()]
+            ['behaviour',Issue.objects.filter(type='BE').count()],
+            ['resource',Issue.objects.filter(type='RE').count()],
+            ['crash',Issue.objects.filter(type='CR').count()],
+            ['enhancement',Issue.objects.filter(type='EN').count()],
+            ['security',Issue.objects.filter(type='SE').count()]
         ],
         'values_2': [
-            ['open',Issue.objects.filter(status='open').count()],
-            ['closed',Issue.objects.filter(status='closed').count()],
-            ['pending',Issue.objects.filter(status='pending').count()],
-            ['languishing',Issue.objects.filter(status='languishing').count()]
+            ['open',Issue.objects.filter(status='OP').count()],
+            ['closed',Issue.objects.filter(status='CL').count()],
+            ['pending',Issue.objects.filter(status='PE').count()],
+            ['languishing',Issue.objects.filter(status='LA').count()]
         ],
         'values_3': [
             [top_assigned[0][0],top_assigned[0][1]],
@@ -38,7 +38,7 @@ def index(request):
 
     return render(request, 'charts/index.html',context)
 
-#def add_new(request):
-#    context = {}
-#    return render(request, 'charts/index.html',context)
+def add_issue(request):
+    context = {}
+    return render(request, 'charts/index.html',context)
     

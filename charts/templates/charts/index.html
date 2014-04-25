@@ -1,42 +1,45 @@
 {% extends "base.html" %}
-{% load googlecharts %}
+
 {% block main %}
-    <h1 class="page-header">Dashboard</h1>
-    <div class="row placeholders">
-        <div class="col-xs-6 col-sm-3 placeholder">
-			Issues Per Type
+	{% load googlecharts %}
+	<h1 class="page-header">Dashboard</h1>
+	<div class="row placeholders">
+		<div class="col-xs-6 col-sm-3 placeholder">
 			<div id="out">test</div>
 		</div>
         
-        <div class="col-xs-6 col-sm-3 placeholder">
-			Status of Issues
+		<div class="col-xs-6 col-sm-3 placeholder">
 			<div id="out2">test 2</div>
 		</div>
         
 		<div class="col-xs-6 col-sm-3 placeholder">
-			Top 10 Assigned Issues
-            <div id="out3">test 3</div>
-        </div>
-        
-        <div class="col-xs-6 col-sm-3 placeholder">
-			<div id="out4">test 4</div>
+			<div id="out3">test 3</div>
 		</div>
         
+		<div class="col-xs-6 col-sm-3 placeholder">
+			<div id="out4">test 4</div>
+		</div>
 	</div>
+{% endblock %}
+
+{% block tail %}
 	{% googlecharts %}
-		{# named data and options can be reused #}
+
 		{% data values "out_data" %}
 			{% col "string" "Name" %}"{{ val }}"{% endcol %}
 			{% col "number" "Value" %}{{ val }}{% endcol %}
 		{% enddata %}
-             	{% data values_2 "out2_data" %}
+
+		{% data values_2 "out2_data" %}
 			{% col "string" "Name" %}"{{ val }}"{% endcol %}
 			{% col "number" "Value" %}{{ val }}{% endcol %}
 		{% enddata %}
+
 		{% data values_3 "out3_data" %}
 			{% col "string" "Name" %}"{{ val }}"{% endcol %}
 			{% col "number" "Assigned Issues" %}{{ val }}{% endcol %}
 		{% enddata %}
+
 		{% options "out_pie_options" %}
 			kind: "PieChart",
 			options: {
@@ -44,6 +47,7 @@
 				height: 200
 			}
 		{% endoptions %}
+
 		{% options "out_column_options" %}
 			kind: "ColumnChart",
 			options: {
@@ -51,9 +55,11 @@
 				height: 200
 			}
 		{% endoptions %}
+
 		{# chart is assembled from container, data and options #}
 		{% graph "out" "out_data" "out_pie_options" %}
 		{% graph "out2" "out2_data" "out_pie_options" %}
 		{% graph "out3" "out3_data" "out_column_options" %}
+
 	{% endgooglecharts %}
 {% endblock %}
