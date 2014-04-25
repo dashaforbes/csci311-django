@@ -82,7 +82,7 @@ class Component(models.Model):
     issue = models.ForeignKey(Issue)
 
     NONE = 'NA'
-    2TO3 = '2T'
+    TO3 = '2T'
     BENCHMARKS = 'BE'
     BUILD = 'BU'
     CTYPES = 'CT'
@@ -107,7 +107,7 @@ class Component(models.Model):
     XML = 'XM'
     COMPONENT_CHOICES = (
         (NONE, 'none'),
-        (2TO3, '2to3 (2.x to 3.0 conversion tool)'),
+        (TO3, '2to3 (2.x to 3.0 conversion tool)'),
         (BENCHMARKS, 'Benchmarks'),
         (BUILD, 'Build'),
         (CTYPES, 'ctypes'),
@@ -131,7 +131,7 @@ class Component(models.Model):
         (WINDOWS, 'Windows'),
         (XML, 'XML')
     )
-    name = models.CharField(max_length=2, choice=COMPONENT_CHOICES, default=NONE)
+    name = models.CharField(max_length=2, choices=COMPONENT_CHOICES, default=NONE)
 
     def __unicode__(self):
         return self.name
