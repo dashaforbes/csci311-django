@@ -1,93 +1,35 @@
-<html>
-	<head>
-    		<meta charset="utf-8">
-    		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-    		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<!-- Bootstrap -->
-   		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-		<link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
-    		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    		<!--[if lt IE 9]>
-      		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-   		<![endif]-->
-	</head>
-
-	<body>
-      	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-       	<div class="container-fluid">
-          		<div class="navbar-header">
-          			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            				<span class="sr-only">Toggle navigation</span>
-            				<span class="icon-bar"></span>
-            				<span class="icon-bar"></span>
-            				<span class="icon-bar"></span>
-          			</button>
-          			<a class="navbar-brand" href="#">Python Project Analytics</a>
-        		</div>
-        		<div class="navbar-collapse collapse">
-          			<ul class="nav navbar-nav navbar-right">
-            				<li><a href="#">Dashboard</a></li>
-            				<li><a href="#">Settings</a></li>
-            				<li><a href="#">Profile</a></li>
-            				<li><a href="#">Help</a></li>
-          			</ul>
-        		</div>
-      		</div>
-    	</div>
-
-	{% load googlecharts %}
-    	<div class="container-fluid">
-      		<div class="row">
-        		<div class="col-sm-3 col-md-2 sidebar">
-          			<ul class="nav nav-sidebar">
-            				<li class="active"><a href="#">Overview</a></li>
-            				<li><a href="#">Reports</a></li>
-            				<li><a href="#">Analytics</a></li>
-            				<li><a href="#">Export</a></li>
-          			</ul>
-          			<ul class="nav nav-sidebar">
-            				<li><a href="">Nav item</a></li>
-            				<li><a href="">Nav item again</a></li>
-            				<li><a href="">One more nav</a></li>
-            				<li><a href="">Another nav item</a></li>
-            				<li><a href="">More navigation</a></li>
-          			</ul>
-       		</div>
-
-        	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          		<h1 class="page-header">Dashboard</h1>
-
-          		<div class="row placeholders">
-            			<div class="col-xs-6 col-sm-3 placeholder">
-					Issues Per Type
-					<div id="out">test</div>
-				</div>
-          			<div class="col-xs-6 col-sm-3 placeholder">
-					Status of Issues
-					<div id="out2">test 2</div>
-				</div>
-				<div class="col-xs-6 col-sm-3 placeholder">
-					Top 10 Assigned Issues
-					<div id="out3">test 3</div>
-				</div>
-            			<div class="col-xs-6 col-sm-3 placeholder">
-					<div id="out4">test 4</div>
-				</div>
-			</div>
+{% extends "base.html" %}
+{% load googlecharts %}
+{% block main %}
+    <h1 class="page-header">Dashboard</h1>
+    <div class="row placeholders">
+        <div class="col-xs-6 col-sm-3 placeholder">
+			Issues Per Type
+			<div id="out">test</div>
 		</div>
+        
+        <div class="col-xs-6 col-sm-3 placeholder">
+			Status of Issues
+			<div id="out2">test 2</div>
+		</div>
+        
+		<div class="col-xs-6 col-sm-3 placeholder">
+			Top 10 Assigned Issues
+            <div id="out3">test 3</div>
+        </div>
+        
+        <div class="col-xs-6 col-sm-3 placeholder">
+			<div id="out4">test 4</div>
+		</div>
+        
 	</div>
-	
-
-
 	{% googlecharts %}
 		{# named data and options can be reused #}
 		{% data values "out_data" %}
 			{% col "string" "Name" %}"{{ val }}"{% endcol %}
 			{% col "number" "Value" %}{{ val }}{% endcol %}
 		{% enddata %}
-              {% data values_2 "out2_data" %}
+             	{% data values_2 "out2_data" %}
 			{% col "string" "Name" %}"{{ val }}"{% endcol %}
 			{% col "number" "Value" %}{{ val }}{% endcol %}
 		{% enddata %}
@@ -114,7 +56,4 @@
 		{% graph "out2" "out2_data" "out_pie_options" %}
 		{% graph "out3" "out3_data" "out_column_options" %}
 	{% endgooglecharts %}
-   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-	</body>
-</html>
+{% endblock %}

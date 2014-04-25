@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from charts.models import Issues
 from django.db.models import Count
+from django import forms
 
 # Create your views here.
 def index(request):
@@ -36,4 +37,8 @@ def index(request):
     }
 
     return render(request, 'charts/index.html',context)
+
+#def add_new(request):
+#    context = {}
+#    return render(request, 'charts/index.html',context)
     

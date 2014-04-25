@@ -7,6 +7,7 @@ django==1.6.2
 django-google-charts
 django-qsstats-magic
 python-dateutil
+django-crispy-forms
 ```
 
 ###How-to

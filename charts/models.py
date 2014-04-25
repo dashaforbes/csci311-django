@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 
 # Create your models here.
 class Issues(models.Model):
@@ -44,3 +45,22 @@ class Commit(models.Model):
     
     def __unicode__(self):
         return self.hash
+
+class IssueForm(ModelForm):
+    class Meta:
+        model = Issues
+
+class ComponentForm(ModelForm):
+    class Meta:
+        model = Component
+        exclude = ('issue',)
+
+class VersionForm(ModelForm):
+    class Meta:
+        model = Version
+        exclude = ('issue',)
+
+class NosyListForm(ModelForm):
+    class Meta:
+        model = NosyList
+        exclude = ('issue',)
