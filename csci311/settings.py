@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'charts',
     'googlecharts',
-    'crispy_forms'
+    'crispy_forms',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,5 +81,18 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-
+STATICFILES_DIRS = (
+    os.path.join(
+        os.path.dirname(__file__),
+        'static',
+    ),
+)
 STATIC_URL = '/static/'
+
+# Crispy template pack
+CRISPY_TEMPLATE_PACK = 'bootstrap'
+
+import django.conf.global_settings as DEFAULT_SETTINGS
+TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
+    'django.core.context_processors.request',
+)

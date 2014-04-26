@@ -1,5 +1,8 @@
 from django.db import models
 from django.forms import ModelForm
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div, MultiField
+from crispy_forms.bootstrap import FormActions
 
 # Create your models here.
 class Issue(models.Model):
@@ -56,7 +59,7 @@ class Issue(models.Model):
     )
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=OPEN)
 
-    assigned_to = models.CharField(max_length=100)
+    assigned_to = models.CharField(max_length=100, blank=True)
 
     LOW = 'LO'
     NORMAL = 'NO'
@@ -159,8 +162,45 @@ class Commit(models.Model):
         return self.hash
 
 class IssueForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(IssueForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Fieldset(
+                'What\'s up',
+                Div(
+                    'title',
+                    css_class = 'form-group'
+                ),
+                Div(
+                    'assigned_to',
+                    css_class = 'form-group'
+                )
+            ),
+            Fieldset(
+                'Bug Categories',
+                Div(
+                    'type',
+                    css_class = 'form-group'
+                ),
+                Div(
+                    'stage',
+                    css_class = 'form-group'
+                ),
+                Div(
+                    'priority',
+                    css_class = 'form-group'
+                ) 
+            ),
+            FormActions(
+                Submit('submit', 'Add', css_class='button btn-primary')
+            )
+        )
+
     class Meta:
         model = Issue
+        exclude = ('creator','message_count','status')
 
 class ComponentForm(ModelForm):
     class Meta:

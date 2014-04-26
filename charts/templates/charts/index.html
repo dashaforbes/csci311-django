@@ -3,20 +3,20 @@
 {% block main %}
 	{% load googlecharts %}
 	<h1 class="page-header">Dashboard</h1>
-	<div class="row placeholders">
-		<div class="col-xs-6 col-sm-3 placeholder">
+	<div class="row">
+		<div class="col-xs-12 col-sm-6 col-md-4">
 			<div id="out">test</div>
 		</div>
         
-		<div class="col-xs-6 col-sm-3 placeholder">
+		<div class="col-xs-12 col-sm-6 col-md-4">
 			<div id="out2">test 2</div>
 		</div>
         
-		<div class="col-xs-6 col-sm-3 placeholder">
+		<div class="col-xs-12 col-sm-6 col-md-4">
 			<div id="out3">test 3</div>
 		</div>
         
-		<div class="col-xs-6 col-sm-3 placeholder">
+		<div class="col-xs-12 col-sm-6 col-md-4">
 			<div id="out4">test 4</div>
 		</div>
 	</div>
@@ -52,7 +52,8 @@
 			kind: "ColumnChart",
 			options: {
 				width: 350,
-				height: 200
+				height: 200,
+				vAxis: {minValue:0, format:'#'}
 			}
 		{% endoptions %}
 
