@@ -57,9 +57,12 @@ def add_issue(request):
     else:
         form = IssueForm()
 
-    return render(request, 'charts/add.html',{
+    return render(request, 'charts/issues/add.html',{
         'form': form,
     })
+
+def issue_index(request):
+    return render(request, 'charts/issues/index.html', {})
 
 def index_redirect(request):
     return HttpResponseRedirect('/charts/')

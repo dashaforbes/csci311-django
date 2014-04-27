@@ -14,11 +14,6 @@
    		<![endif]-->
       <div>{% block head %}{% endblock %}</div>
       <title>CSCI311 Project</title>
-      <style>
-        .asteriskField {
-          display: none;
-        }
-      </style>
 	</head>
 
 	<body>
@@ -36,7 +31,6 @@
         		</div>
         		<div class="navbar-collapse collapse">
           			<ul class="nav navbar-nav navbar-right">
-            				<li><a href="#">Dashboard</a></li>
             				<li><a href="#">Settings</a></li>
             				<li><a href="#">Profile</a></li>
             				<li><a href="#">Help</a></li>
@@ -55,10 +49,15 @@
             		<li{% if request.path == "/charts/" %} class="active"{% endif %}>
                   <a href="/charts/">Overview</a>
                 </li>
-            		<li{% if request.path == "/charts/add/" %} class="active"{% endif %}>
-                  <a href="/charts/add">Add New</a>
-                </li>
           		</ul>
+              <ul class="nav nav-sidebar">
+                <li{% if request.path == "/charts/issues/" %} class="active"{% endif %}>
+                  <a href="/charts/issues/">Issues</a>
+                </li>
+                <li{% if request.path == "/charts/issues/add/" %} class="active"{% endif %}>
+                  <a href="/charts/issues/add" style="padding-left:3em">Add</a>
+                </li>
+              </ul>
             </div>
           </div>
           {% endblock %}
@@ -66,7 +65,7 @@
         
         
         <div class="container-fluid">
-        	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        	<div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 main">
                 {% block main %}{% endblock %}
             </div>
         </div>
