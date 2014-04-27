@@ -1,16 +1,40 @@
 from django.db import models
 from django.forms import ModelForm
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div, MultiField
-from crispy_forms.bootstrap import FormActions
+from crispy_forms.layout import *
+from crispy_forms.bootstrap import *
 
 # Create your models here.
+
+class Component(models.Model):
+    name = models.CharField(primary_key=True, max_length=30)
+
+    def __unicode__(self):
+        return self.name
+
+class Version(models.Model):
+    version = models.CharField(primary_key=True, max_length=3)
+
+    def __unicode__(self):
+        return self.version
+    
+class People(models.Model):
+    username = models.CharField(primary_key=True, max_length=100)
+
+    def __unicode__(self):
+        return self.username
+
 class Issue(models.Model):
     id = models.AutoField(primary_key=True)
     activity = models.DateTimeField(auto_now=True)
-    creator = models.CharField(max_length=100)
+    creator = models.ForeignKey(People, related_name='creator')
     title = models.CharField(max_length=250)
-    
+    assigned_to = models.ForeignKey(People, blank=True, null=True, related_name='assigned_to')
+    message_count = models.IntegerField(default=0)
+    components = models.ManyToManyField(Component, blank=True, null=True, related_name='components')
+    versions = models.ManyToManyField(Version, blank=True, null=True, related_name='versions')
+    nosy_list = models.ManyToManyField(People, blank=True, null=True, related_name='nosy_list')
+
     NONE = 'NA'
 
     BEHAVIOR = 'BE'
@@ -59,8 +83,6 @@ class Issue(models.Model):
     )
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=OPEN)
 
-    assigned_to = models.CharField(max_length=100, blank=True)
-
     LOW = 'LO'
     NORMAL = 'NO'
     HIGH = 'HI'
@@ -76,86 +98,20 @@ class Issue(models.Model):
         (RELEASE_BLOCKER, 'release blocker')
     )
     priority = models.CharField(max_length=2, choices=PRIORITY_CHOICES, default=NORMAL)
-    message_count = models.IntegerField(default=0)
 
     def __unicode__(self):
         return unicode(self.title)
 
-class Component(models.Model):
-    issue = models.ForeignKey(Issue)
-
-    NONE = 'NA'
-    TO3 = '2T'
-    BENCHMARKS = 'BE'
-    BUILD = 'BU'
-    CTYPES = 'CT'
-    DEMOS_TOOLS = 'DT'
-    DEVGUIDE = 'DE'
-    DISTUTILS = 'DI'
-    DISTUTILS2 = 'D2'
-    DOCUMENTATION = 'DO'
-    EMAIL = 'EM'
-    EXTENSION = 'EX'
-    IDLE = 'ID'
-    INSTALLATION = 'IN'
-    INTERPRETER = 'IC'
-    IO = 'IO'
-    LIBRARY = 'LI'
-    MACINTOSH = 'MA'
-    REGEX = 'RE'
-    TESTS = 'TE'
-    TKINTER = 'TK'
-    UNICODE = 'UN'
-    WINDOWS = 'WI'
-    XML = 'XM'
-    COMPONENT_CHOICES = (
-        (NONE, 'none'),
-        (TO3, '2to3 (2.x to 3.0 conversion tool)'),
-        (BENCHMARKS, 'Benchmarks'),
-        (BUILD, 'Build'),
-        (CTYPES, 'ctypes'),
-        (DEMOS_TOOLS, 'Demos and Tools'),
-        (DEVGUIDE, 'Devguide'),
-        (DISTUTILS, 'Distutils'),
-        (DISTUTILS2, 'Distutils2'),
-        (DOCUMENTATION, 'Documentation'),
-        (EMAIL, 'email'),
-        (EXTENSION, 'Extension Modules'),
-        (IDLE, 'IDLE'),
-        (INSTALLATION, 'Installation'),
-        (INTERPRETER, 'Interpreter Core'),
-        (IO, 'IO'),
-        (LIBRARY, 'Library (Lib)'),
-        (MACINTOSH, 'Macintosh'),
-        (REGEX, 'Regular Expressions'),
-        (TESTS, 'Tests'),
-        (TKINTER, 'Tkinter'),
-        (UNICODE, 'Unicode'),
-        (WINDOWS, 'Windows'),
-        (XML, 'XML')
-    )
-    name = models.CharField(max_length=2, choices=COMPONENT_CHOICES, default=NONE)
+class Developer(models.Model):
+    email = models.CharField(primary_key=True, max_length=100)
+    name = models.CharField(max_length=100)
 
     def __unicode__(self):
         return self.name
 
-class Version(models.Model):
-    issue = models.ForeignKey(Issue)
-    version = models.CharField(max_length=10)
-
-    def __unicode__(self):
-        return self.version
-    
-class NosyList(models.Model):
-    issue = models.ForeignKey(Issue)
-    username = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return self.username
-
 class Commit(models.Model):
     hash = models.CharField(max_length=50,primary_key=True)
-    author = models.CharField(max_length=100)
+    author = models.ForeignKey(Developer)
     time = models.DateTimeField('commit time')
     
     def __unicode__(self):
@@ -165,54 +121,48 @@ class IssueForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(IssueForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_tag = False
+        self.helper.form_method = 'POST'
+        self.helper.form_action = '/charts/add/'
         self.helper.layout = Layout(
-            Fieldset(
-                'What\'s up',
+            Row(
                 Div(
                     'title',
-                    css_class = 'form-group'
+                    css_class = 'form-group col-xs-12'
                 ),
                 Div(
                     'assigned_to',
-                    css_class = 'form-group'
-                )
-            ),
-            Fieldset(
-                'Bug Categories',
-                Div(
-                    'type',
-                    css_class = 'form-group'
+                    css_class = 'form-group col-xs-12'
                 ),
                 Div(
-                    'stage',
-                    css_class = 'form-group'
+                    'nosy_list',
+                    css_class = 'form-group col-xs-12'
+                )
+            ),
+            Row(
+                Div(
+                    'type',
+                    css_class = 'form-group col-xs-12 col-sm-6 col-md-6 col-lg-6'
                 ),
                 Div(
                     'priority',
-                    css_class = 'form-group'
-                ) 
-            ),
-            FormActions(
-                Submit('submit', 'Add', css_class='button btn-primary')
+                    css_class = 'form-group col-xs-12 col-sm-6 col-md-6 col-lg-6'
+                ),
+                Div(
+                    'components',
+                    css_class = 'form-group col-xs-12 col-sm-12 col-md-6 col-lg-6',
+                ),
+                Div(
+                    'versions',
+                    css_class = 'form-group col-xs-12 col-sm-12 col-md-6 col-lg-6',
+                ),
+            ),          
+            Row(
+                FormActions(
+                    Submit('submit', 'Add', css_class='button btn-primary col-xs-12 col-sm-12 col-md-2 col-lg-1')
+                )   
             )
         )
 
     class Meta:
         model = Issue
-        exclude = ('creator','message_count','status')
-
-class ComponentForm(ModelForm):
-    class Meta:
-        model = Component
-        exclude = ('issue',)
-
-class VersionForm(ModelForm):
-    class Meta:
-        model = Version
-        exclude = ('issue',)
-
-class NosyListForm(ModelForm):
-    class Meta:
-        model = NosyList
-        exclude = ('issue',)
+        exclude = ('creator','stage','status','message_count')

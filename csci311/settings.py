@@ -90,7 +90,7 @@ STATICFILES_DIRS = (
 STATIC_URL = '/static/'
 
 # Crispy template pack
-CRISPY_TEMPLATE_PACK = 'bootstrap'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 import django.conf.global_settings as DEFAULT_SETTINGS
 TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (

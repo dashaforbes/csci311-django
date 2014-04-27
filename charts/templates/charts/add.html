@@ -4,8 +4,6 @@
 {% block main %}
 	<h1 class="page-header">Add New Issue</h1>
 	<div class="col-md-12">
-		<form method="POST" action="/charts/add/" role="role">
-			{% crispy form %}
-		</form>
+		{% crispy form %}
 	</div>
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from charts.models import Issue, IssueForm
+from charts.models import Issue, People, IssueForm
 from django.db.models import Count
 from django import forms
 from django.http import HttpResponseRedirect
@@ -44,11 +44,11 @@ def add_issue(request):
         form = IssueForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
+            creator = People.objects.get(username="Test")
             i = Issue(
                 title=data['title'],
-                creator="Test",
+                creator=creator,
                 type=data['type'],
-                stage=data['stage'],
                 assigned_to=data['assigned_to'],
                 priority=data['priority']
             )
