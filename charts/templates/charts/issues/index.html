@@ -36,7 +36,7 @@
 			{% for issue in issues %}
 			<tr>
 			    <td class="col-xs-2">{{ issue.activity }}</td>
-			    <td class="col-xs-5"><a href="/charts/issues/id/{{ issue.id }}">{{ issue.title }}</a></td>
+			    <td class="col-xs-5"><a href="/charts/issues/{{ issue.id }}">{{ issue.title }}</a></td>
 			    <td class="col-xs-1">{{ issue.get_status_display }}</td>
 			    <td class="col-xs-2">{{ issue.creator }}</td>
 			    <td class="col-xs-2">{{ issue.assigned_to }}<td>

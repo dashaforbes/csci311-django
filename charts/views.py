@@ -1,9 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from charts.models import Issue, People, IssueForm
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from charts.models import Issue, People, IssueForm, IssueEditForm
 from django.db.models import Count
 from django import forms
-from django.http import HttpResponseRedirect
 
 # Create your views here.
 def index(request):
@@ -78,3 +77,34 @@ def issue_index(request):
         }
     }
     return render(request, 'charts/issues/index.html', context)
+
+def issue_detail(request, issue_id):
+    try:
+        issue = Issue.objects.get(pk=issue_id)
+    except Issue.DoesNotExist:     
+        raise Http404
+
+    context = {
+        'issue':issue
+    }
+    return render(request, 'charts/issues/detail.html', context)
+
+def edit_issue(request, issue_id):
+    try:
+        issue = Issue.objects.get(pk=issue_id)
+    except Issue.DoesNotExist:     
+        raise Http404
+
+    if request.method == 'POST':
+        form = IssueForm(request.POST)
+        if form.is_valid():
+            form.save()
+            redirect = '/charts/issues/' + issue_id + '/'
+            return HttpResponseRedirect(redirect)
+    else:
+        form = IssueEditForm(instance=issue)
+
+    return render(request, 'charts/issues/edit.html', {
+        'form':form,
+        'issue':issue,
+    })

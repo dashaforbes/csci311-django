@@ -122,7 +122,7 @@ class IssueForm(ModelForm):
         super(IssueForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'POST'
-        self.helper.form_action = '/charts/add/'
+        self.helper.form_action = '/charts/issues/add/'
         self.helper.layout = Layout(
             Row(
                 Div(
@@ -166,3 +166,65 @@ class IssueForm(ModelForm):
     class Meta:
         model = Issue
         exclude = ('creator','stage','status','message_count')
+
+class IssueEditForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(IssueEditForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.form_action = '/charts/issues/{{ issue.id }}/edit'
+        self.helper.layout = Layout(
+            Row(
+                Div(
+                    'title',
+                    css_class = 'form-group col-xs-12'
+                ),
+                Div(
+                    'assigned_to',
+                    css_class = 'form-group col-xs-12'
+                ),
+                Div(
+                    'nosy_list',
+                    css_class = 'form-group col-xs-12'
+                )
+            ),
+            Row(
+                Div(
+                    'type',
+                    css_class = 'form-group col-xs-12 col-sm-6 col-md-6 col-lg-6'
+                ),
+                Div(
+                    'priority',
+                    css_class = 'form-group col-xs-12 col-sm-6 col-md-6 col-lg-6'
+                ),
+                Div(
+                    'components',
+                    css_class = 'form-group col-xs-12 col-sm-12 col-md-6 col-lg-6',
+                ),
+                Div(
+                    'versions',
+                    css_class = 'form-group col-xs-12 col-sm-12 col-md-6 col-lg-6',
+                ),
+                Div(
+                    'stage',
+                    css_class = 'form-group col-xs-12 col-sm-12 col-md-4 col-lg-4',
+                ),
+                Div(
+                    'status',
+                    css_class = 'form-group col-xs-12 col-sm-12 col-md-4 col-lg-4',
+                ),
+                Div(
+                    'message_count',
+                    css_class = 'form-group col-xs-12 col-sm-12 col-md-4 col-lg-4',
+                ),
+            ),          
+            Row(
+                FormActions(
+                    Submit('submit', 'Save', css_class='button btn-primary col-xs-12 col-sm-12 col-md-2 col-lg-1')
+                )   
+            )
+        )
+
+    class Meta:
+        model = Issue
+        exclude = ('creator',)

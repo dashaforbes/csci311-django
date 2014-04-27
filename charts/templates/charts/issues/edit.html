@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+	<h1 class="page-header">
+		{{ issue.title }}
+		<a class="btn btn-default btn-sm" href="/charts/issues/{{ issue.id }}/" role="button">
+			Back
+		</a>
+	</h1>
+	<div class="col-xs-12">
+		{% crispy form %}
+	</div>
+{% endblock %}
