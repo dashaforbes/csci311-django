@@ -171,8 +171,7 @@ class IssueEditForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(IssueEditForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_method = 'POST'
-        self.helper.form_action = '/charts/issues/{{ issue.id }}/edit'
+        self.helper.form_tag = False
         self.helper.layout = Layout(
             Row(
                 Div(

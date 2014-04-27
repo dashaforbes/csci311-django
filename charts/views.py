@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
 from charts.models import Issue, People, IssueForm, IssueEditForm
 from django.db.models import Count
 from django import forms
@@ -79,10 +79,7 @@ def issue_index(request):
     return render(request, 'charts/issues/index.html', context)
 
 def issue_detail(request, issue_id):
-    try:
-        issue = Issue.objects.get(pk=issue_id)
-    except Issue.DoesNotExist:     
-        raise Http404
+    issue = get_object_or_404(Issue, pk=issue_id)
 
     context = {
         'issue':issue
@@ -90,15 +87,25 @@ def issue_detail(request, issue_id):
     return render(request, 'charts/issues/detail.html', context)
 
 def edit_issue(request, issue_id):
-    try:
-        issue = Issue.objects.get(pk=issue_id)
-    except Issue.DoesNotExist:     
-        raise Http404
+    issue = get_object_or_404(Issue, pk=issue_id)
 
     if request.method == 'POST':
-        form = IssueForm(request.POST)
+        form = IssueEditForm(request.POST)
         if form.is_valid():
-            form.save()
+            d = form.cleaned_data
+            Issue.objects.filter(id=issue_id).update(
+                title=d['title'],
+                assigned_to=d['assigned_to'],
+                message_count=d['message_count'],
+                type=d['type'],
+                stage=d['stage'],
+                status=d['status'],
+                priority=d['priority'],
+            )
+            issue.components = d['components']
+            issue.versions = d['versions']
+            issue.nosy_list = d['nosy_list']
+            issue.save()
             redirect = '/charts/issues/' + issue_id + '/'
             return HttpResponseRedirect(redirect)
     else:

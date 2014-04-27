@@ -8,7 +8,7 @@
 			Back
 		</a>
 	</h1>
-	<div class="col-xs-12">
+	<form role="form" method="POST" action="/charts/issues/{{ issue.id }}/edit/" class="col-xs-12">
 		{% crispy form %}
-	</div>
+	</form>
 {% endblock %}
