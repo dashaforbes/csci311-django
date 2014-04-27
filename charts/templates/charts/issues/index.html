@@ -2,4 +2,46 @@
 
 {% block main %}
 	<h1 class="page-header">Issues/Tasks</h1>
+	<div class="col-xs-6 col-sm-4 col-md-2">
+	    <p class='text-center'><strong>{{ stats.contrib }}</strong> People</p>
+	</div>
+	<div class="col-xs-6 col-sm-4 col-md-2">
+		<p class='text-center'><strong>{{ stats.amount }}</strong> Issues</p>
+	</div>
+	<div class="col-xs-6 col-sm-4 col-md-2">
+		<p class='text-center'><strong>{{ stats.open }}</strong> Open</p>
+	</div>
+	<div class="col-xs-6 col-sm-4 col-md-2">
+	    <p class='text-center'><strong>{{ stats.closed }}</strong> Closed</p>
+	</div>
+	<div class="col-xs-6 col-sm-4 col-md-2">
+	    <p class='text-center'><strong>{{ stats.pending }}</strong> Pending</p>
+	</div>
+	<div class="col-xs-6 col-sm-4 col-md-2">
+	    <p class='text-center'><strong>{{ stats.languish }}</strong> Languishing</p>
+	</div>
+
+	<div class="col-xs-12" style="height:25px">
+	</div>
+
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<tr>
+			    <th class="col-xs-2">Updated</th>
+				<th class="col-xs-5">Title</th>
+				<th class="col-xs-1">Status</th>
+				<th class="col-xs-2">Creator</th>
+				<th class="col-xs-2">Assigned To</th>
+			</tr>
+			{% for issue in issues %}
+			<tr>
+			    <td class="col-xs-2">{{ issue.activity }}</td>
+			    <td class="col-xs-5"><a href="/charts/issues/id/{{ issue.id }}">{{ issue.title }}</a></td>
+			    <td class="col-xs-1">{{ issue.get_status_display }}</td>
+			    <td class="col-xs-2">{{ issue.creator }}</td>
+			    <td class="col-xs-2">{{ issue.assigned_to }}<td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
 {% endblock %}

@@ -61,9 +61,20 @@ def add_issue(request):
         'form': form,
     })
 
-def issue_index(request):
-    return render(request, 'charts/issues/index.html', {})
-
 def index_redirect(request):
     return HttpResponseRedirect('/charts/')
-    
+
+def issue_index(request):
+    issues = Issue.objects.order_by('-activity').all()
+    context = {
+        'issues':issues,
+        'stats': {
+            'amount':Issue.objects.all().count(),
+            'contrib':Issue.objects.values_list('creator').annotate(contrib_count=Count('creator')).count(),
+            'open':Issue.objects.filter(status='OP').count(),
+            'closed':Issue.objects.filter(status='CL').count(),
+            'pending':Issue.objects.filter(status='PE').count(),
+            'languish':Issue.objects.filter(status='LA').count()
+        }
+    }
+    return render(request, 'charts/issues/index.html', context)
