@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block main %}
+	<h1 class="page-header">People</h1>
+
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<tr>
+			<th>Person</th>
+			<th>Issues Created</th>
+			<th>Issues Assigned</th>
+			<th>Nosied On</th>
+			</tr>
+			{% for person in people %}
+				<tr>
+					<td><a href="/charts/people/{{ person.username}} ">{{ person.username }}</a></td>
+					<td>{{ person.created_count }}</td>
+					<td>{{ person.assigned_count }}</td>
+					<td>{{ person.nosy_count }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+{% endblock %}

@@ -6,12 +6,12 @@ from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
 def index(request):
     top_assigned = Issue.objects.values_list('assigned_to').annotate(assigned_count=Count('assigned_to')).order_by('-assigned_count')[:10]
-    print str(top_assigned)
     context = {
         'values': [
             ['behaviour',Issue.objects.filter(type='BE').count()],
@@ -42,12 +42,13 @@ def index(request):
 
     return render(request, 'charts/index.html',context)
 
+@login_required
 def add_issue(request):
     if request.method == 'POST':
         form = IssueForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            creator = People.objects.get(username="Test")
+            creator = People.objects.get(username=request.user.username)
             i = Issue(
                 title=data['title'],
                 creator=creator,
@@ -90,6 +91,7 @@ def issue_detail(request, issue_id):
     }
     return render(request, 'charts/issues/detail.html', context)
 
+@login_required
 def edit_issue(request, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
 
@@ -97,6 +99,10 @@ def edit_issue(request, issue_id):
         form = IssueEditForm(request.POST)
         if form.is_valid():
             d = form.cleaned_data
+            issue.components = d['components']
+            issue.versions = d['versions']
+            issue.nosy_list = d['nosy_list']
+            issue.save()
             Issue.objects.filter(id=issue_id).update(
                 title=d['title'],
                 assigned_to=d['assigned_to'],
@@ -106,10 +112,6 @@ def edit_issue(request, issue_id):
                 status=d['status'],
                 priority=d['priority'],
             )
-            issue.components = d['components']
-            issue.versions = d['versions']
-            issue.nosy_list = d['nosy_list']
-            issue.save()
             redirect = '/charts/issues/' + issue_id + '/'
             return HttpResponseRedirect(redirect)
     else:
@@ -129,7 +131,12 @@ def login_view(request):
             user = authenticate(username=d['username'], password=d['password'])
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect('/charts/')
+                next = request.GET.get('next')
+                print next
+                if next:
+                    return HttpResponseRedirect(next)
+                else:
+                    return HttpResponseRedirect('/charts/')
             else:
                 messages.error(request, "Invalid login details :(")
      
@@ -168,3 +175,9 @@ def register_view(request):
         'form':form,
     })
 
+def people_index(request):
+    people = People.objects.all().annotate(assigned_count = Count('assigned_to')).annotate(created_count = Count('creator')).annotate(nosy_count = Count('nosy_list')).order_by('-created_count')
+    context = {
+        'people':people
+    }
+    return render(request, 'charts/people/index.html', context)

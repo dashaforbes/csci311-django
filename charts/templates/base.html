@@ -21,12 +21,12 @@
             {% block topbar %}
             <div class="container-fluid">
           		<div class="navbar-header">
-          			<a class="navbar-brand" href="#">Python Project Analytics</a>
+          			<a class="navbar-brand" href="/charts/">Python Project Analytics</a>
         		  </div>
         		  <div class="navbar-collapse collapse">
           			<ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
-                      <li><a href="/charts/account/">{{ user.username }}</a></li>
+                      <li><a href="/charts/people/{{ user.username }}/">{{ user.username }}</a></li>
                       <li><a href="/charts/account/logout">Log Out</a></li>
                     {% else %}
                       <li><a href="/charts/account/login">Log In</a></li>
@@ -52,8 +52,10 @@
                 <li{% if request.path == "/charts/issues/" %} class="active"{% endif %}>
                   <a href="/charts/issues/">Issues</a>
                 </li>
-                <li{% if request.path == "/charts/issues/add/" %} class="active"{% endif %}>
-                  <a href="/charts/issues/add" style="padding-left:3em">Add</a>
+              </ul>
+              <ul class="nav nav-sidebar">
+                <li{% if request.path == "/charts/people/" %} class="active"{% endif %}>
+                  <a href="/charts/people/">People</a>
                 </li>
               </ul>
             </div>

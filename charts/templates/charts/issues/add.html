@@ -2,7 +2,11 @@
 {% load crispy_forms_tags %}
 
 {% block main %}
-	<h1 class="page-header">Add New Issue</h1>
+	<h1 class="page-header">Add New Issue
+		<a class="btn btn-default btn-sm" href="/charts/issues/" role="button">
+			Back
+		</a>
+	</h1>
 	<div class="col-md-12">
 		{% crispy form %}
 	</div>

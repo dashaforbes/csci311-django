@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 
 {% block main %}
-	<h1 class="page-header">Issues/Tasks</h1>
+	<h1 class="page-header">Issues/Tasks
+		<a class="btn btn-default btn-sm" href="/charts/issues/add" role="button">
+			Add New
+		</a>
+	</h1>
 	<div class="col-xs-6 col-sm-4 col-md-2">
 	    <p class='text-center'><strong>{{ stats.contrib }}</strong> People</p>
 	</div>
