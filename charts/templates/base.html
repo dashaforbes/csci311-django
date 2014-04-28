@@ -54,6 +54,11 @@
                 </li>
               </ul>
               <ul class="nav nav-sidebar">
+                <li{% if request.path == "/charts/commits/" %} class="active"{% endif %}>
+                  <a href="/charts/commits/">Commits</a>
+                </li>
+              </ul>
+              <ul class="nav nav-sidebar">
                 <li{% if request.path == "/charts/people/" %} class="active"{% endif %}>
                   <a href="/charts/people/">People</a>
                 </li>

@@ -242,6 +242,12 @@ class LoginForm(Form):
         required = True,
         widget = PasswordInput,
     )
+    
+    next = CharField(
+        max_length=100,
+        required = False,
+        label = ''
+    )
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
@@ -255,7 +261,11 @@ class LoginForm(Form):
             'username',
             'password',
             StrictButton('Login', css_class='btn-primary col-md-offset-1', type='submit'),
-            HTML('<a href="/charts/" class="btn btn-default" role="button">Cancel</a>')
+            HTML('<a href="/charts/" class="btn btn-default" role="button">Cancel</a>'),
+            Field(
+                'next',
+                css_class = 'hidden'
+            ),
         )
 
 class RegisterForm(Form):

@@ -131,19 +131,17 @@ def login_view(request):
             user = authenticate(username=d['username'], password=d['password'])
             if user is not None:
                 login(request, user)
-                next = request.GET.get('next')
-                print next
-                if next:
-                    return HttpResponseRedirect(next)
+                if d['next']:
+                    return HttpResponseRedirect(d['next'])
                 else:
                     return HttpResponseRedirect('/charts/')
             else:
                 messages.error(request, "Invalid login details :(")
      
     else:
-        form = LoginForm()
-     
-
+        next = request.GET.get('next')
+        form = LoginForm(initial={'next':next})
+    
     return render(request, 'charts/account/login.html', {
         'form':form,
     })
@@ -181,3 +179,15 @@ def people_index(request):
         'people':people
     }
     return render(request, 'charts/people/index.html', context)
+
+def person_detail(request, person_id):
+    person = get_object_or_404(People, pk=person_id)
+    context = {
+        'person':person,
+        'stats': {
+            'created_count':Issue.objects.filter(creator=person.username).count(),
+            'assigned_count':Issue.objects.filter(assigned_to=person.username).count(),
+            'nosy_count':Issue.objects.filter(nosy_list=person.username).count(),
+        }
+    }
+    return render(request, 'charts/people/detail.html', context)

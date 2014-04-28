@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block main %}
+	<h1 class="page-header">
+		{{ person.username }}
+	</h1>
+	<div class="col-xs-12">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
+			<li><a href="#created" data-toggle="tab">{{ stats.created_count }} Created</a></li>
+			<li><a href="#assigned" data-toggle="tab">Assigned to {{ stats.assigned_count }}</a></li>
+			<li><a href="#nosy" data-toggle="tab">Nosy on {{ stats.nosy_count }}</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="profile">
+				<p>todo: information about person, stats etc.</p>
+			</div>
+			<div class="tab-pane" id="created">
+				<p>todo: table of issues they've created</p>
+			</div>
+			<div class="tab-pane" id="assigned">
+				<p>todo: table of issues they've been assigned to</p>
+			</div>
+			<div class="tab-pane" id="nosy">
+			    <p>todo: table of issues they're on the nosy list of</p>
+			</div>
+		</div>
+	</div>
+{% endblock %}
