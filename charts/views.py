@@ -1,8 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from charts.models import Issue, People, IssueForm, IssueEditForm
+from charts.models import Issue, People, IssueForm, IssueEditForm, LoginForm, RegisterForm
 from django.db.models import Count
 from django import forms
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib import messages
+
 
 # Create your views here.
 def index(request):
@@ -115,3 +119,52 @@ def edit_issue(request, issue_id):
         'form':form,
         'issue':issue,
     })
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            d = form.cleaned_data
+            user = authenticate(username=d['username'], password=d['password'])
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect('/charts/')
+            else:
+                messages.error(request, "Invalid login details :(")
+     
+    else:
+        form = LoginForm()
+     
+
+    return render(request, 'charts/account/login.html', {
+        'form':form,
+    })
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/charts/')
+
+def register_view(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            d = form.cleaned_data
+            try:
+                User.objects.create_user(username=d['username'], password=d['password'])
+                p = People(username=d['username'])
+                p.save()
+                user = authenticate(username=d['username'], password=d['password'])
+                login(request, user)
+                return HttpResponseRedirect('/charts/')
+            except: 
+                messages.error(request, d['username'])
+
+    else:
+        form = RegisterForm()
+     
+
+    return render(request, 'charts/account/register.html', {
+        'form':form,
+    })
+

@@ -1,5 +1,5 @@
 from django.db import models
-from django.forms import ModelForm
+from django.forms import ModelForm, Form, CharField, PasswordInput
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import *
 from crispy_forms.bootstrap import *
@@ -227,3 +227,62 @@ class IssueEditForm(ModelForm):
     class Meta:
         model = Issue
         exclude = ('creator',)
+
+
+class LoginForm(Form):
+    username = CharField(
+        label = "Username",
+        max_length = 100,
+        required = True,
+    )
+
+    password = CharField(
+        label = "Password",
+        max_length = 100,
+        required = True,
+        widget = PasswordInput,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_method = 'POST'
+        self.helper.form_action = '/charts/account/login/'
+        self.helper.label_class = 'col-xs-12 col-md-1'
+        self.helper.field_class = 'col-xs-12 col-md-5'
+        self.helper.layout = Layout(
+            'username',
+            'password',
+            StrictButton('Login', css_class='btn-primary col-md-offset-1', type='submit'),
+            HTML('<a href="/charts/" class="btn btn-default" role="button">Cancel</a>')
+        )
+
+class RegisterForm(Form):
+    username = CharField(
+        label = "Username",
+        max_length = 100,
+        required = True,
+    )
+
+    password = CharField(
+        label = "Password",
+        max_length = 100,
+        required = True,
+        widget = PasswordInput,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_method = 'POST'
+        self.helper.form_action = '/charts/account/register/'
+        self.helper.label_class = 'col-xs-12 col-md-1'
+        self.helper.field_class = 'col-xs-12 col-md-5'
+        self.helper.layout = Layout(
+            'username',
+            'password',
+            StrictButton('Register', css_class='btn-primary col-md-offset-1', type='submit'),
+            HTML('<a href="/charts/" class="btn btn-default" role="button">Cancel</a>')
+        )

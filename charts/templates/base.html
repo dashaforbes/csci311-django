@@ -21,24 +21,22 @@
             {% block topbar %}
             <div class="container-fluid">
           		<div class="navbar-header">
-          			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            				<span class="sr-only">Toggle navigation</span>
-            				<span class="icon-bar"></span>
-            				<span class="icon-bar"></span>
-            				<span class="icon-bar"></span>
-          			</button>
           			<a class="navbar-brand" href="#">Python Project Analytics</a>
-        		</div>
-        		<div class="navbar-collapse collapse">
+        		  </div>
+        		  <div class="navbar-collapse collapse">
           			<ul class="nav navbar-nav navbar-right">
-            				<li><a href="#">Settings</a></li>
-            				<li><a href="#">Profile</a></li>
-            				<li><a href="#">Help</a></li>
+                    {% if user.is_authenticated %}
+                      <li><a href="/charts/account/">{{ user.username }}</a></li>
+                      <li><a href="/charts/account/logout">Log Out</a></li>
+                    {% else %}
+                      <li><a href="/charts/account/login">Log In</a></li>
+                      <li><a href="/charts/account/register">Register</a></li>
+                    {% endif %}
           			</ul>
-        		</div>
-      		</div>
+        		  </div>
+      		  </div>
             {% endblock %}
-    	</div>
+    	   </div>
 
         
     	<div class="container-fluid">
