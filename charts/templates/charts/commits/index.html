@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block main %}
+	<h1 class="page-header">Commits</h1>
+	<div class="col-xs-12" style="height:50px"><strong>{{ stats.count }}</strong> commits over todo: timedelta between first/last</div>
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<tr>
+			<th>ID</th>
+			<th>When</th>
+			<th>Author</th>
+			</tr>
+			{% for commit in commits %}
+				<tr>
+					<td><a href="/charts/commits/{{ commit.hash }}/">{{ commit.hash }}</a></td>
+					<td>{{ commit.time }}</td>
+					<td>{{ commit.author }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+{% endblock %}

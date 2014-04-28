@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from charts.models import Issue, People, IssueForm, IssueEditForm, LoginForm, RegisterForm
+from charts.models import Issue, People, IssueForm, IssueEditForm, LoginForm, RegisterForm, Commit, Developer
 from django.db.models import Count
 from django import forms
 from django.contrib.auth import authenticate, login, logout
@@ -191,3 +191,14 @@ def person_detail(request, person_id):
         }
     }
     return render(request, 'charts/people/detail.html', context)
+
+def commits_index(request):
+    commits = Commit.objects.all().order_by('-time')
+    context = {
+        'commits':commits,
+        'stats': {
+            'count':Commit.objects.all().count()
+        }
+    }
+
+    return render(request, 'charts/commits/index.html', context)
