@@ -4,7 +4,7 @@ from charts.models import Issue, People, IssueForm, IssueEditForm, LoginForm, Re
 from django.db.models import Count
 from django import forms
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -85,15 +85,22 @@ def issue_index(request):
 
 def issue_detail(request, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
-
+    if str(issue.creator) == request.user.username or request.user.groups.filter(name='Project Manager'):
+        edit = True
+    else:
+        edit = False
     context = {
-        'issue':issue
+        'issue':issue,
+        'edit':edit
     }
     return render(request, 'charts/issues/detail.html', context)
 
 @login_required
 def edit_issue(request, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
+    redirect = '/charts/issues/' + issue_id + '/'
+    if request.user.username != str(issue.creator) and not request.user.groups.filter(name='Project Manager'):
+        return HttpResponseRedirect(redirect)    
 
     if request.method == 'POST':
         form = IssueEditForm(request.POST)
@@ -112,7 +119,6 @@ def edit_issue(request, issue_id):
                 status=d['status'],
                 priority=d['priority'],
             )
-            redirect = '/charts/issues/' + issue_id + '/'
             return HttpResponseRedirect(redirect)
     else:
         form = IssueEditForm(instance=issue)
@@ -155,18 +161,20 @@ def register_view(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             d = form.cleaned_data
-            try:
-                User.objects.create_user(username=d['username'], password=d['password'])
-                p = People(username=d['username'])
-                p.save()
-                user = authenticate(username=d['username'], password=d['password'])
-                login(request, user)
-                return HttpResponseRedirect('/charts/')
-            except: 
-                messages.error(request, d['username'])
+            #try:
+            user = User.objects.create_user(username=d['username'], password=d['password'])
+            g = Group.objects.get(name=d['group'])
+            g.user_set.add(user)
+            p = People(username=d['username'])
+            p.save()
+            user = authenticate(username=d['username'], password=d['password'])
+            login(request, user)
+            return HttpResponseRedirect('/charts/')
+            #except: 
+            messages.error(request, d['username'])
 
     else:
-        form = RegisterForm()
+        form = RegisterForm(initial={'group':'Contributor'})
      
 
     return render(request, 'charts/account/register.html', {

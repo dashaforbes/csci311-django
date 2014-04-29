@@ -10,5 +10,6 @@
 	</h1>
 	<form role="form" method="POST" action="/charts/issues/{{ issue.id }}/edit/" class="col-xs-12">
 		{% crispy form %}
+		<a href="#" class="btn btn-danger" role="button">Delete</a>
 	</form>
 {% endblock %}

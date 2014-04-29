@@ -3,9 +3,11 @@
 {% block main %}
 	<h1 class="page-header">
 		{{ issue.title }}
-		<a class="btn btn-default btn-sm" href="/charts/issues/{{ issue.id }}/edit" role="button">
-			Edit
-		</a>
+		{% if edit %}
+			<a class="btn btn-default btn-sm" href="/charts/issues/{{ issue.id }}/edit" role="button">
+				Edit
+			</a>
+		{% endif %}
 	</h1>
 	<div class="col-xs-12 col-md-6">
 		<p>

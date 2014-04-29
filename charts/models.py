@@ -1,5 +1,5 @@
 from django.db import models
-from django.forms import ModelForm, Form, CharField, PasswordInput
+from django.forms import ModelForm, Form, CharField, PasswordInput, ChoiceField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import *
 from crispy_forms.bootstrap import *
@@ -217,11 +217,7 @@ class IssueEditForm(ModelForm):
                     css_class = 'form-group col-xs-12 col-sm-12 col-md-4 col-lg-4',
                 ),
             ),          
-            Row(
-                FormActions(
-                    Submit('submit', 'Save', css_class='button btn-primary col-xs-12 col-sm-12 col-md-2 col-lg-1')
-                )   
-            )
+            StrictButton('Save', css_class='btn-primary', type='submit'),
         )
 
     class Meta:
@@ -282,6 +278,15 @@ class RegisterForm(Form):
         widget = PasswordInput,
     )
 
+    group = ChoiceField(
+        label = "Group",
+        choices = (
+            ('Contributor','Contributor'),
+            ('Project Manager','Project Manager'),
+        ),
+        required=True,
+    )
+
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -293,6 +298,7 @@ class RegisterForm(Form):
         self.helper.layout = Layout(
             'username',
             'password',
+            'group',
             StrictButton('Register', css_class='btn-primary col-md-offset-1', type='submit'),
             HTML('<a href="/charts/" class="btn btn-default" role="button">Cancel</a>')
         )
