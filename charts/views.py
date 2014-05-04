@@ -14,6 +14,13 @@ def index(request):
     top_assigned = Issue.objects.values_list('assigned_to').annotate(assigned_count=Count('assigned_to')).order_by('-assigned_count')[:10]
     
     top_issues = Issue.objects.order_by('-message_count')[:5]
+    
+    top_creator = Issue.objects.values_list('creator').annotate(created_count=Count('creator')).order_by('-created_count')[:5]
+    
+    top_components = Issue.objects.values_list('components').annotate(components_count=Count('components')).order_by('-components_count')[:5]
+    
+    top_versions = Issue.objects.values_list('versions').annotate(versions_count=Count('versions')).order_by('-versions_count')[:5]
+    
         
     context = {
         'values': [
@@ -65,6 +72,27 @@ def index(request):
             ['critical',Issue.objects.filter(priority='CR').count()],
             ['deferred blocker',Issue.objects.filter(priority='DE').count()],
             ['release blocker',Issue.objects.filter(priority='RE').count()]
+        ],
+        'values_7': [
+            [top_creator[0][0],top_creator[0][1]],
+            [top_creator[1][0],top_creator[1][1]],
+            [top_creator[2][0],top_creator[2][1]],
+            [top_creator[3][0],top_creator[3][1]],
+            [top_creator[4][0],top_creator[4][1]]
+        ],
+        'values_8': [
+            [top_components[0][0],top_components[0][1]],
+            [top_components[1][0],top_components[1][1]],
+            [top_components[2][0],top_components[2][1]],
+            [top_components[3][0],top_components[3][1]],
+            [top_components[4][0],top_components[4][1]]
+        ],
+        'values_9': [
+            [top_versions[0][0],top_versions[0][1]],
+            [top_versions[1][0],top_versions[1][1]],
+            [top_versions[2][0],top_versions[2][1]],
+            [top_versions[3][0],top_versions[3][1]],
+            [top_versions[4][0],top_versions[4][1]]
         ]
     }
 
