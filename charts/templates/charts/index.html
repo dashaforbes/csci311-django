@@ -40,6 +40,11 @@
 			{% col "number" "Assigned Issues" %}{{ val }}{% endcol %}
 		{% enddata %}
 
+        {% data values_4 "out4_data" %}
+        {% col "string" "Name" %}"{{ val }}"{% endcol %}
+        {% col "number" "Message count" %}{{ val }}{% endcol %}
+        {% enddata %}
+
 		{% options "out_pie_options" %}
 			kind: "PieChart",
 			options: {
@@ -61,6 +66,7 @@
 		{% graph "out" "out_data" "out_pie_options" %}
 		{% graph "out2" "out2_data" "out_pie_options" %}
 		{% graph "out3" "out3_data" "out_column_options" %}
+        {% graph "out4" "out4_data" "out_column_options" %}
 
 	{% endgooglecharts %}
 {% endblock %}
