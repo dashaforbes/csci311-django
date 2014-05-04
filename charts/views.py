@@ -14,16 +14,17 @@ def index(request):
     top_assigned = Issue.objects.values_list('assigned_to').annotate(assigned_count=Count('assigned_to')).order_by('-assigned_count')[:10]
     
     top_issues = Issue.objects.order_by('-message_count')[:5]
-    
-    
-    
+        
     context = {
         'values': [
             ['behaviour',Issue.objects.filter(type='BE').count()],
             ['resource',Issue.objects.filter(type='RE').count()],
             ['crash',Issue.objects.filter(type='CR').count()],
             ['enhancement',Issue.objects.filter(type='EN').count()],
-            ['security',Issue.objects.filter(type='SE').count()]
+            ['security',Issue.objects.filter(type='SE').count()],
+            ['none',Issue.objects.filter(type='NA').count()],
+            ['compile error',Issue.objects.filter(type='CO').count()],
+            ['performance',Issue.objects.filter(type='PE').count()]
         ],
         'values_2': [
             ['open',Issue.objects.filter(status='OP').count()],
@@ -49,8 +50,22 @@ def index(request):
             [top_issues[2].title, top_issues[2].message_count],
             [top_issues[3].title, top_issues[3].message_count],
             [top_issues[4].title, top_issues[4].message_count]
+        ],
+        'values_5': [
+            ['test needed',Issue.objects.filter(stage='TN').count()],
+            ['needs patch',Issue.objects.filter(stage='NP').count()],
+            ['patch review',Issue.objects.filter(stage='PR').count()],
+            ['commit review',Issue.objects.filter(stage='CR').count()],
+            ['resolved',Issue.objects.filter(stage='RE').count()]
+        ],
+        'values_6': [
+            ['low',Issue.objects.filter(priority='LO').count()],
+            ['normal',Issue.objects.filter(priority='NO').count()],
+            ['high',Issue.objects.filter(priority='HI').count()],
+            ['critical',Issue.objects.filter(priority='CR').count()],
+            ['deferred blocker',Issue.objects.filter(priority='DE').count()],
+            ['release blocker',Issue.objects.filter(priority='RE').count()]
         ]
-    
     }
 
     return render(request, 'charts/index.html',context)
